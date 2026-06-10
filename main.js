@@ -381,10 +381,7 @@ function animate() {
   const delta = clock.getDelta()
   const elapsed = clock.getElapsedTime()
 
-  tablet.position.y = Math.sin(elapsed * 0.5) * 0.08
-  tablet.rotation.z = Math.sin(elapsed * 0.3) * 0.008
-
-  if (autoRotate) tablet.rotation.y += delta * 0.25
+  if (autoRotate) tablet.rotation.y = -Math.PI / 5 + Math.sin(elapsed * 0.4) * 0.15
 
   rimLight.intensity = 0.5 + Math.sin(elapsed * 1.5) * 0.1
 
