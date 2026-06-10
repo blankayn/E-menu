@@ -27,9 +27,11 @@ container.appendChild(renderer.domElement)
 
 const controls = new OrbitControls(camera, renderer.domElement)
 controls.enableDamping = true
-controls.dampingFactor = 0.05
+controls.dampingFactor = 0.08
+controls.rotateSpeed = 0.8
 controls.enableZoom = false
 controls.enablePan = false
+if (window.innerWidth < 1024) controls.enabled = false
 if (window.innerWidth < 1024) controls.enabled = false
 if (window.innerWidth < 1024) controls.enabled = false
 
@@ -299,10 +301,15 @@ renderer.domElement.addEventListener('click', (e) => {
   mouse.y = -((e.clientY - r.top) / r.height) * 2 + 1
   raycaster.setFromCamera(mouse, camera)
   
-  for (const h of raycaster.intersectObjects(tablet.children, true)) {
-    if (h.object.userData.clickable && !clickCD) {
+  const intersects = raycaster.intersectObjects(scene.children, true)
+  for (const h of intersects) {
+    let obj = h.object
+    while (obj && obj !== tablet) {
+      obj = obj.parent
+    }
+    if (obj === tablet && !clickCD) {
       clickCD = true
-      setTimeout(() => clickCD = false, 300)
+      setTimeout(() => clickCD = false, 500)
       screenMode = screenMode === 'full' ? 'minimal' : 'full'
       drawScreen()
       screenTexture.needsUpdate = true
@@ -452,19 +459,18 @@ ctx.add(() => {
 
 // ─── ANIMATION LOOP ───
 const clock = new THREE.Clock()
-let isDragging = false
-let autoRotate = true
-let dragTimeout
-
-controls.addEventListener('start', () => { isDragging = true; autoRotate = false; clearTimeout(dragTimeout) })
-controls.addEventListener('end', () => { isDragging = false; dragTimeout = setTimeout(() => autoRotate = true, 3000) })
 
 function animate() {
   requestAnimationFrame(animate)
   const delta = clock.getDelta()
   const elapsed = clock.getElapsedTime()
 
-  if (autoRotate) tablet.rotation.y = -Math.PI / 5 + Math.sin(elapsed * 0.4) * 0.15
+  // Only auto-rotate on mobile (no OrbitControls)
+  if (window.innerWidth < 1024) {
+    tablet.rotation.y = -Math.PI / 5 + Math.sin(elapsed * 0.4) * 0.15
+  }
+
+  tablet.position.y = Math.sin(elapsed * 0.5) * 0.03
 
   rimLight.intensity = 0.5 + Math.sin(elapsed * 1.5) * 0.1
 
