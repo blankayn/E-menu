@@ -113,13 +113,6 @@ a {
     pointer-events: auto;
 }
 
-@media (min-width: 1025px) {
-    #three-canvas {
-        left: 50%;
-        width: 50%;
-    }
-}
-
 @media (max-width: 1024px) {
     #three-canvas canvas {
         pointer-events: auto;

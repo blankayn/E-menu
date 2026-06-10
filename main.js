@@ -15,7 +15,7 @@ scene.background = null
 
 const container = document.getElementById('three-canvas')
 const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 100)
-camera.position.set(0, 0, 15)
+camera.position.set(0, 0, 12)
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
 renderer.setSize(window.innerWidth, window.innerHeight)
@@ -252,7 +252,7 @@ function createTablet() {
 }
 
 const tablet = createTablet()
-tablet.position.set(0, 0, -8)
+tablet.position.set(3.5, 0, -8)
 tablet.rotation.y = -Math.PI / 5
 tablet.rotation.x = 0.05
 tablet.scale.setScalar(0)
@@ -276,23 +276,37 @@ if (window.innerWidth < 768) {
     z: -2,
     duration: 1.6, ease: 'power3.out', delay: 0.3,
   })
-} else {
-  gsap.to(tablet.scale, {
-    x: 0.55, y: 0.55, z: 0.55,
-    duration: 1.8, ease: 'power3.out', delay: 0.3,
-  })
-  gsap.to(tablet.position, {
-    z: 0,
-    duration: 2, ease: 'power3.out', delay: 0.3,
-  })
-}
+  } else {
+    gsap.to(tablet.scale, {
+      x: 0.75, y: 0.75, z: 0.75,
+      duration: 1.8, ease: 'power3.out', delay: 0.3,
+    })
+    gsap.to(tablet.position, {
+      z: 0,
+      duration: 2, ease: 'power3.out', delay: 0.3,
+    })
+  }
 
 // ─── CLICK & INTERACTION ───
 const raycaster = new THREE.Raycaster()
 const mouse = new THREE.Vector2()
 let clickCD = false
 
+function checkTabletIntersection(event) {
+  const r = renderer.domElement.getBoundingClientRect()
+  mouse.x = ((event.clientX - r.left) / r.width) * 2 - 1
+  mouse.y = -((event.clientY - r.top) / r.height) * 2 + 1
+  raycaster.setFromCamera(mouse, camera)
+  return raycaster.intersectObjects(tablet.children, true).length > 0
+}
+
+renderer.domElement.addEventListener('mousemove', (e) => {
+  if (window.innerWidth < 1024) return
+  controls.enabled = checkTabletIntersection(e)
+})
+
 renderer.domElement.addEventListener('click', (e) => {
+  if (window.innerWidth >= 1024 && !checkTabletIntersection(e)) return
   const r = renderer.domElement.getBoundingClientRect()
   mouse.x = ((e.clientX - r.left) / r.width) * 2 - 1
   mouse.y = -((e.clientY - r.top) / r.height) * 2 + 1
@@ -483,8 +497,8 @@ window.addEventListener('resize', () => {
     gsap.to(tablet.scale, { x: 0.55, y: 0.55, z: 0.55, duration: 0.5 })
     gsap.to(tablet.position, { x: 0, y: -1, z: -2, duration: 0.5 })
   } else {
-    gsap.to(tablet.scale, { x: 0.55, y: 0.55, z: 0.55, duration: 0.5 })
-    gsap.to(tablet.position, { x: 0, y: 0, z: 0, duration: 0.5 })
+    gsap.to(tablet.scale, { x: 0.75, y: 0.75, z: 0.75, duration: 0.5 })
+    gsap.to(tablet.position, { x: 3.5, y: 0, z: 0, duration: 0.5 })
   }
 })
 
