@@ -102,6 +102,13 @@ a {
     pointer-events: none;
 }
 
+@media (max-width: 1024px) {
+    #three-canvas {
+        pointer-events: auto;
+        opacity: 0.6;
+    }
+}
+
 #three-canvas canvas {
     pointer-events: auto;
 }
@@ -791,7 +798,8 @@ a {
     }
 
     .nav-link {
-        display: none;
+        font-size: 0.8rem;
+        color: var(--gray-400);
     }
 }
 
@@ -815,10 +823,6 @@ a {
         opacity: 0.6;
         max-width: 220px;
         height: 220px;
-    }
-
-    #three-canvas {
-        opacity: 0.5;
     }
 
     .section-title {
