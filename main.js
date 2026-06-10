@@ -15,7 +15,7 @@ scene.background = null
 
 const container = document.getElementById('three-canvas')
 const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 100)
-camera.position.set(0, 0, 12)
+camera.position.set(0, 0, 15)
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
 renderer.setSize(window.innerWidth, window.innerHeight)
@@ -278,7 +278,7 @@ if (window.innerWidth < 768) {
   })
 } else {
   gsap.to(tablet.scale, {
-    x: 0.75, y: 0.75, z: 0.75,
+    x: 0.55, y: 0.55, z: 0.55,
     duration: 1.8, ease: 'power3.out', delay: 0.3,
   })
   gsap.to(tablet.position, {
@@ -483,7 +483,7 @@ window.addEventListener('resize', () => {
     gsap.to(tablet.scale, { x: 0.55, y: 0.55, z: 0.55, duration: 0.5 })
     gsap.to(tablet.position, { x: 0, y: -1, z: -2, duration: 0.5 })
   } else {
-    gsap.to(tablet.scale, { x: 0.75, y: 0.75, z: 0.75, duration: 0.5 })
+    gsap.to(tablet.scale, { x: 0.55, y: 0.55, z: 0.55, duration: 0.5 })
     gsap.to(tablet.position, { x: 0, y: 0, z: 0, duration: 0.5 })
   }
 })
