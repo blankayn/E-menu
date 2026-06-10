@@ -252,7 +252,7 @@ function createTablet() {
 }
 
 const tablet = createTablet()
-tablet.position.set(3.5, 0, -8)
+tablet.position.set(0, 0, -8)
 tablet.rotation.y = -Math.PI / 5
 tablet.rotation.x = 0.05
 tablet.scale.setScalar(0)
@@ -484,7 +484,7 @@ window.addEventListener('resize', () => {
     gsap.to(tablet.position, { x: 0, y: -1, z: -2, duration: 0.5 })
   } else {
     gsap.to(tablet.scale, { x: 0.75, y: 0.75, z: 0.75, duration: 0.5 })
-    gsap.to(tablet.position, { x: 3.5, y: 0, z: 0, duration: 0.5 })
+    gsap.to(tablet.position, { x: 0, y: 0, z: 0, duration: 0.5 })
   }
 })
 
