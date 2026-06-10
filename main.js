@@ -292,21 +292,17 @@ const raycaster = new THREE.Raycaster()
 const mouse = new THREE.Vector2()
 let clickCD = false
 
-function checkTabletIntersection(event) {
-  const r = renderer.domElement.getBoundingClientRect()
-  mouse.x = ((event.clientX - r.left) / r.width) * 2 - 1
-  mouse.y = -((event.clientY - r.top) / r.height) * 2 + 1
-  raycaster.setFromCamera(mouse, camera)
-  return raycaster.intersectObjects(tablet.children, true).length > 0
-}
-
+// Desktop: Enable controls only on right side of screen
 renderer.domElement.addEventListener('mousemove', (e) => {
   if (window.innerWidth < 1024) return
-  controls.enabled = checkTabletIntersection(e)
+  const isRightSide = e.clientX > window.innerWidth / 2
+  controls.enabled = isRightSide
 })
 
 renderer.domElement.addEventListener('click', (e) => {
-  if (window.innerWidth >= 1024 && !checkTabletIntersection(e)) return
+  // Desktop: Only allow clicking on right side
+  if (window.innerWidth >= 1024 && e.clientX <= window.innerWidth / 2) return
+  
   const r = renderer.domElement.getBoundingClientRect()
   mouse.x = ((e.clientX - r.left) / r.width) * 2 - 1
   mouse.y = -((e.clientY - r.top) / r.height) * 2 + 1
