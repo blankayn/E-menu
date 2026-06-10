@@ -295,28 +295,21 @@ const raycaster = new THREE.Raycaster()
 const mouse = new THREE.Vector2()
 let clickCD = false
 
-renderer.domElement.addEventListener('click', (e) => {
+renderer.domElement.addEventListener('pointerdown', (e) => {
   const r = renderer.domElement.getBoundingClientRect()
   mouse.x = ((e.clientX - r.left) / r.width) * 2 - 1
   mouse.y = -((e.clientY - r.top) / r.height) * 2 + 1
   raycaster.setFromCamera(mouse, camera)
   
-  const intersects = raycaster.intersectObjects(scene.children, true)
-  for (const h of intersects) {
-    let obj = h.object
-    while (obj && obj !== tablet) {
-      obj = obj.parent
-    }
-    if (obj === tablet && !clickCD) {
-      clickCD = true
-      setTimeout(() => clickCD = false, 500)
-      screenMode = screenMode === 'full' ? 'minimal' : 'full'
-      drawScreen()
-      screenTexture.needsUpdate = true
-      screenMat.emissiveIntensity = 0.5
-      setTimeout(() => screenMat.emissiveIntensity = 0.12, 100)
-      break
-    }
+  const intersects = raycaster.intersectObject(tablet, true)
+  if (intersects.length > 0 && !clickCD) {
+    clickCD = true
+    setTimeout(() => clickCD = false, 500)
+    screenMode = screenMode === 'full' ? 'minimal' : 'full'
+    drawScreen()
+    screenTexture.needsUpdate = true
+    screenMat.emissiveIntensity = 0.5
+    setTimeout(() => screenMat.emissiveIntensity = 0.12, 100)
   }
 })
 
