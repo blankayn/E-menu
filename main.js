@@ -323,19 +323,45 @@ ctx.add(() => {
     }
   })
 
-  // Features grid scroll
-  const featureCards = gsap.utils.toArray('.feature-card')
-  gsap.to(featureCards, {
-    opacity: 1,
-    y: 0,
-    duration: 0.6,
-    ease: 'power2.out',
-    stagger: 0.08,
-    scrollTrigger: {
-      trigger: '.features-grid',
-      start: 'top 70%',
-      toggleActions: 'play none none none',
-    },
+  // Features grid - unique animations per card direction
+  gsap.utils.toArray('.bento-card').forEach((card, i) => {
+    const dir = card.dataset.anim || 'bottom'
+    const fromVars = { opacity: 0 }
+    if (dir === 'left') {
+      fromVars.x = -80
+      fromVars.rotationY = 15
+    } else if (dir === 'right') {
+      fromVars.x = 80
+      fromVars.rotationY = -15
+    } else if (dir === 'bottom') {
+      fromVars.scale = 0.88
+      fromVars.y = 80
+    }
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: card,
+        start: 'top 82%',
+        toggleActions: 'play none none none',
+      }
+    })
+    tl.fromTo(card, fromVars, {
+      opacity: 1, x: 0, y: 0, scale: 1, rotationY: 0,
+      duration: 0.9,
+      ease: 'back.out(1.4)',
+      delay: i * 0.12
+    })
+    tl.fromTo(card.querySelector('.card-content'), { y: 20, opacity: 0 }, {
+      y: 0, opacity: 1,
+      duration: 0.5,
+      ease: 'power2.out'
+    }, '-=0.4')
+    // Hover tilt
+    card.addEventListener('mouseenter', () => {
+      gsap.to(card, { scale: 1.03, duration: 0.4, ease: 'power2.out' })
+    })
+    card.addEventListener('mouseleave', () => {
+      gsap.to(card, { scale: 1, duration: 0.4, ease: 'power2.out' })
+    })
   })
 
   // Steps stagger

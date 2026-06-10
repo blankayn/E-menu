@@ -364,41 +364,71 @@ a {
     margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 280px;
     gap: 20px;
 }
 
-.feature-card {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 16px;
-    padding: 40px 30px;
-    transition: all 0.4s ease;
+.bento-card {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
     opacity: 0;
-    transform: translateY(40px);
+    transform: translateY(60px);
 }
 
-.feature-card:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.12);
-    transform: translateY(-4px);
+.card-wide {
+    grid-column: span 2;
 }
 
-.feature-icon {
-    font-size: 1.8rem;
-    margin-bottom: 20px;
+.card-tall {
+    grid-row: span 1;
 }
 
-.feature-card h3 {
-    font-size: 1.1rem;
+.feature-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.bento-card:hover .feature-bg {
+    transform: scale(1.08);
+}
+
+.card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%);
+    transition: background 0.4s ease;
+}
+
+.bento-card:hover .card-overlay {
+    background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.75) 100%);
+}
+
+.card-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 32px;
+    z-index: 2;
+}
+
+.card-content h3 {
+    font-size: 1.35rem;
     font-weight: 700;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     color: var(--white);
 }
 
-.feature-card p {
+.card-content p {
     font-size: 0.9rem;
-    color: var(--gray-500);
-    line-height: 1.7;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.6;
     font-weight: 300;
 }
 
@@ -662,6 +692,11 @@ a {
 
     .features-grid {
         grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: 250px;
+    }
+
+    .card-wide {
+        grid-column: span 2;
     }
 
     .contact-inner {
@@ -757,13 +792,12 @@ a {
         height: 36px;
     }
 
-    .feature-card {
-        padding: 24px 16px;
+    .card-content h3 {
+        font-size: 1.15rem;
     }
 
-    .feature-icon {
-        font-size: 1.6rem;
-        margin-bottom: 12px;
+    .card-content p {
+        font-size: 0.85rem;
     }
 
     .contact-inner {
@@ -869,36 +903,6 @@ a {
     transform: translateY(-8px);
     box-shadow: 0 25px 80px rgba(57, 255, 20, 0.12);
     border-color: rgba(57, 255, 20, 0.35);
-}
-
-/* Feature card premium-card hover */
-.feature-card.premium-card {
-    position: relative;
-    overflow: hidden;
-}
-
-.feature-card.premium-card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(57, 255, 20, 0.12), transparent 45%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-}
-
-.feature-card.premium-card:hover::before {
-    opacity: 1;
-}
-
-.feature-card.premium-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 25px 80px rgba(57, 255, 20, 0.12);
-    border-color: rgba(57, 255, 20, 0.35);
-}
-
-.feature-card.premium-card:hover .feature-icon {
-    filter: brightness(1.3) drop-shadow(0 4px 12px rgba(57, 255, 20, 0.4));
 }
 
 /* Contact section premium boxes */
