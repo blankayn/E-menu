@@ -114,10 +114,6 @@ a {
 }
 
 @media (max-width: 1024px) {
-    #three-canvas {
-        top: 50%;
-        height: 50%;
-    }
     #three-canvas canvas {
         pointer-events: auto;
     }

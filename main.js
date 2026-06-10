@@ -18,7 +18,7 @@ const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerH
 camera.position.set(0, 0, 12)
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
-renderer.setSize(container.clientWidth, container.clientHeight)
+renderer.setSize(window.innerWidth, window.innerHeight)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 renderer.shadowMap.enabled = true
 renderer.toneMapping = THREE.ACESFilmicToneMapping
@@ -30,6 +30,7 @@ controls.enableDamping = true
 controls.dampingFactor = 0.05
 controls.enableZoom = false
 controls.enablePan = false
+if (window.innerWidth < 1024) controls.enabled = false
 
 // ─── LIGHTING ───
 scene.add(new THREE.AmbientLight(0xffffff, 0.6))
@@ -471,9 +472,11 @@ function animate() {
 
 // ─── RESIZE ───
 window.addEventListener('resize', () => {
-  camera.aspect = container.clientWidth / container.clientHeight
+  camera.aspect = window.innerWidth / window.innerHeight
   camera.updateProjectionMatrix()
-  renderer.setSize(container.clientWidth, container.clientHeight)
+  renderer.setSize(window.innerWidth, window.innerHeight)
+  
+  controls.enabled = window.innerWidth >= 1024
   
   if (window.innerWidth < 768) {
     gsap.to(tablet.scale, { x: 0.55, y: 0.55, z: 0.55, duration: 0.5 })
