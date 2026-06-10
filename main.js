@@ -30,6 +30,7 @@ controls.enableDamping = true
 controls.dampingFactor = 0.05
 controls.enableZoom = false
 controls.enablePan = false
+if (window.innerWidth < 1024) controls.enabled = false
 
 // ─── LIGHTING ───
 scene.add(new THREE.AmbientLight(0xffffff, 0.6))
@@ -475,7 +476,8 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix()
   renderer.setSize(window.innerWidth, window.innerHeight)
   
-  // Adjust tablet for mobile/desktop
+  controls.enabled = window.innerWidth >= 1024
+  
   if (window.innerWidth < 768) {
     gsap.to(tablet.scale, { x: 0.55, y: 0.55, z: 0.55, duration: 0.5 })
     gsap.to(tablet.position, { x: 2, y: -1, z: -2, duration: 0.5 })
