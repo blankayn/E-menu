@@ -31,6 +31,7 @@ controls.dampingFactor = 0.05
 controls.enableZoom = false
 controls.enablePan = false
 if (window.innerWidth < 1024) controls.enabled = false
+if (window.innerWidth < 1024) controls.enabled = false
 
 // ─── LIGHTING ───
 scene.add(new THREE.AmbientLight(0xffffff, 0.6))
@@ -292,17 +293,7 @@ const raycaster = new THREE.Raycaster()
 const mouse = new THREE.Vector2()
 let clickCD = false
 
-// Desktop: Enable controls only on right side of screen
-renderer.domElement.addEventListener('mousemove', (e) => {
-  if (window.innerWidth < 1024) return
-  const isRightSide = e.clientX > window.innerWidth / 2
-  controls.enabled = isRightSide
-})
-
 renderer.domElement.addEventListener('click', (e) => {
-  // Desktop: Only allow clicking on right side
-  if (window.innerWidth >= 1024 && e.clientX <= window.innerWidth / 2) return
-  
   const r = renderer.domElement.getBoundingClientRect()
   mouse.x = ((e.clientX - r.left) / r.width) * 2 - 1
   mouse.y = -((e.clientY - r.top) / r.height) * 2 + 1
