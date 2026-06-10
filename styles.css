@@ -31,6 +31,9 @@ body {
     color: var(--white);
     line-height: 1.6;
     overflow-x: hidden;
+    width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 /* ===== MESH GRADIENT ===== */
@@ -208,9 +211,11 @@ a {
     background: linear-gradient(170deg, #000000 0%, #1a1a1a 25%, #4a4a4a 55%, #1a1a1a 78%, #000000 100%);
     min-height: 100vh;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    justify-content: center;
     overflow: hidden;
     pointer-events: none;
+    padding-top: 120px;
 }
 
 .hero-inner {
@@ -826,7 +831,7 @@ a {
 
 @media (max-width: 480px) {
     .hero-inner {
-        padding: 100px 20px 40px;
+        padding: 60px 20px 40px;
         gap: 24px;
     }
 
