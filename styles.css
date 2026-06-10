@@ -303,47 +303,90 @@ a {
 .steps {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
 }
 
-.step {
+.step-card {
+    position: relative;
     display: flex;
-    gap: 28px;
-    padding: 36px;
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 16px;
-    transition: all 0.4s ease;
+    align-items: center;
+    gap: 24px;
+    padding: 24px 28px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 18px;
+    overflow: hidden;
+    cursor: pointer;
     opacity: 0;
-    transform: translateY(30px);
 }
 
-.step:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.12);
-    transform: translateY(-2px);
-}
-
-.step-number {
-    font-size: 2.8rem;
+.step-card::after {
+    content: attr(data-step);
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 4rem;
     font-weight: 900;
-    color: var(--white);
-    opacity: 0.08;
-    line-height: 1;
-    min-width: 70px;
+    color: rgba(255, 255, 255, 0.03);
+    pointer-events: none;
 }
 
-.step-content h3 {
-    font-size: 1.15rem;
+.step-glow {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.step-card:nth-child(1) .step-glow { background: #4f46e5; top: -80px; left: -60px; }
+.step-card:nth-child(2) .step-glow { background: #059669; top: -80px; right: -60px; }
+.step-card:nth-child(3) .step-glow { background: #d97706; bottom: -80px; left: -60px; }
+.step-card:nth-child(4) .step-glow { background: #db2777; bottom: -80px; right: -60px; }
+
+.step-card:hover .step-glow {
+    opacity: 0.35;
+}
+
+.step-icon {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--white);
+    z-index: 1;
+    transition: all 0.4s ease;
+}
+
+.step-card:nth-child(1):hover .step-icon { background: rgba(79, 70, 229, 0.3); border-color: #4f46e5; box-shadow: 0 0 30px rgba(79, 70, 229, 0.2); }
+.step-card:nth-child(2):hover .step-icon { background: rgba(5, 150, 105, 0.3); border-color: #059669; box-shadow: 0 0 30px rgba(5, 150, 105, 0.2); }
+.step-card:nth-child(3):hover .step-icon { background: rgba(217, 119, 6, 0.3); border-color: #d97706; box-shadow: 0 0 30px rgba(217, 119, 6, 0.2); }
+.step-card:nth-child(4):hover .step-icon { background: rgba(219, 39, 119, 0.3); border-color: #db2777; box-shadow: 0 0 30px rgba(219, 39, 119, 0.2); }
+
+.step-body {
+    z-index: 1;
+}
+
+.step-tag {
+    font-size: 1.1rem;
     font-weight: 700;
-    margin-bottom: 8px;
     color: var(--white);
+    margin-bottom: 6px;
+    display: block;
 }
 
-.step-content p {
-    font-size: 0.95rem;
+.step-body p {
+    font-size: 0.9rem;
     color: var(--gray-500);
-    line-height: 1.7;
+    line-height: 1.6;
     font-weight: 300;
 }
 
@@ -773,18 +816,20 @@ a {
         padding: 60px 20px;
     }
 
-    .step {
-        padding: 24px;
+    .step-card {
+        padding: 20px;
         gap: 16px;
     }
 
-    .step-number {
-        font-size: 2rem;
-        min-width: 60px;
+    .step-icon {
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
     }
 
-    .step-content h3 {
-        font-size: 1.05rem;
+    .step-card::after {
+        font-size: 3rem;
+        right: 16px;
     }
 
     .nav-icon-btn {
@@ -896,13 +941,6 @@ a {
 
 .section-title.centered:hover::after {
     width: 140px;
-}
-
-/* Step premium-card hover lift */
-.step.premium-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 25px 80px rgba(57, 255, 20, 0.12);
-    border-color: rgba(57, 255, 20, 0.35);
 }
 
 /* Contact section premium boxes */

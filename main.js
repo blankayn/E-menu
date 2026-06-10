@@ -364,19 +364,54 @@ ctx.add(() => {
     })
   })
 
-  // Steps stagger
-  gsap.utils.toArray('.step').forEach((step, i) => {
-    gsap.to(step, {
-      opacity: 1,
-      y: 0,
-      duration: 0.6,
-      ease: 'power2.out',
-      delay: i * 0.1,
+  // Steps - unique animations per direction
+  gsap.utils.toArray('.step-card').forEach((card, i) => {
+    const dir = card.dataset.anim || 'bottom'
+    const fromVars = { opacity: 0 }
+    if (dir === 'left') {
+      fromVars.x = -100
+      fromVars.skewX = 8
+    } else if (dir === 'right') {
+      fromVars.x = 100
+      fromVars.skewX = -8
+    } else if (dir === 'scale') {
+      fromVars.scale = 0.7
+      fromVars.y = 40
+    } else if (dir === 'bottom') {
+      fromVars.y = 80
+      fromVars.rotationX = -15
+    }
+    const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: step,
-        start: 'top 82%',
+        trigger: card,
+        start: 'top 84%',
         toggleActions: 'play none none none',
-      },
+      }
+    })
+    tl.fromTo(card, fromVars, {
+      opacity: 1, x: 0, y: 0, scale: 1, skewX: 0, rotationX: 0,
+      duration: 0.75,
+      ease: 'power3.out',
+      delay: i * 0.15
+    })
+    // Icon pop
+    tl.fromTo(card.querySelector('.step-icon'), { scale: 0, rotation: -45 }, {
+      scale: 1, rotation: 0,
+      duration: 0.5,
+      ease: 'back.out(2)'
+    }, '-=0.35')
+    // Text fade
+    tl.fromTo(card.querySelector('.step-body'), { y: 12, opacity: 0 }, {
+      y: 0, opacity: 1,
+      duration: 0.4,
+      ease: 'power2.out'
+    }, '-=0.25')
+    // Hover: gentle lift + glow
+    card.addEventListener('mouseenter', () => {
+      gsap.to(card, { y: -4, scale: 1.02, duration: 0.35, ease: 'power2.out' })
+    })
+    card.addEventListener('mouseleave', () => {
+      gsap.to(card, { y: 0, scale: 1, duration: 0.35, ease: 'power2.out' })
     })
   })
 
