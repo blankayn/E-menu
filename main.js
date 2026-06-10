@@ -257,15 +257,34 @@ tablet.rotation.x = 0.05
 tablet.scale.setScalar(0)
 scene.add(tablet)
 
+// Mobile: scale down tablet
+if (window.innerWidth < 768) {
+  tablet.scale.setScalar(0.45)
+  tablet.position.set(2, -1, -6)
+} else {
+  tablet.scale.setScalar(0)
+}
+
 // ─── TABLET ENTRANCE ANIMATION ───
-gsap.to(tablet.scale, {
-  x: 0.75, y: 0.75, z: 0.75,
-  duration: 1.8, ease: 'power3.out', delay: 0.3,
-})
-gsap.to(tablet.position, {
-  z: 0,
-  duration: 2, ease: 'power3.out', delay: 0.3,
-})
+if (window.innerWidth < 768) {
+  gsap.to(tablet.scale, {
+    x: 0.55, y: 0.55, z: 0.55,
+    duration: 1.4, ease: 'power3.out', delay: 0.3,
+  })
+  gsap.to(tablet.position, {
+    z: -2,
+    duration: 1.6, ease: 'power3.out', delay: 0.3,
+  })
+} else {
+  gsap.to(tablet.scale, {
+    x: 0.75, y: 0.75, z: 0.75,
+    duration: 1.8, ease: 'power3.out', delay: 0.3,
+  })
+  gsap.to(tablet.position, {
+    z: 0,
+    duration: 2, ease: 'power3.out', delay: 0.3,
+  })
+}
 
 // ─── CLICK ───
 const raycaster = new THREE.Raycaster()
@@ -455,6 +474,15 @@ window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight
   camera.updateProjectionMatrix()
   renderer.setSize(window.innerWidth, window.innerHeight)
+  
+  // Adjust tablet for mobile/desktop
+  if (window.innerWidth < 768) {
+    gsap.to(tablet.scale, { x: 0.55, y: 0.55, z: 0.55, duration: 0.5 })
+    gsap.to(tablet.position, { x: 2, y: -1, z: -2, duration: 0.5 })
+  } else {
+    gsap.to(tablet.scale, { x: 0.75, y: 0.75, z: 0.75, duration: 0.5 })
+    gsap.to(tablet.position, { x: 3.5, y: 0, z: 0, duration: 0.5 })
+  }
 })
 
 // ─── NAV SCROLL ───
