@@ -130,7 +130,7 @@ a {
     right: 0;
     z-index: 100;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 20px 50px;
 }
