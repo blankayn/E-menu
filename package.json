@@ -1,0 +1,18 @@
+{
+  "name": "cornstore-tablet",
+  "version": "1.0.0",
+  "description": "Cornstore 3D Samsung Galaxy Tab A9 showcase",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.2.0"
+  },
+  "dependencies": {
+    "gsap": "^3.15.0",
+    "three": "^0.165.0"
+  }
+}

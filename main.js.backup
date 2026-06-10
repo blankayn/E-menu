@@ -1,0 +1,504 @@
+import * as THREE from 'three'
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
+
+/* ============================================================== *
+ *  KIOSK - Samsung Galaxy Tab A9
+ * ============================================================== */
+
+// ─── SCENE ───
+const scene = new THREE.Scene()
+scene.background = null
+
+const container = document.getElementById('three-canvas')
+const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 100)
+camera.position.set(0, 0, 12)
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
+renderer.setSize(window.innerWidth, window.innerHeight)
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+renderer.shadowMap.enabled = true
+renderer.toneMapping = THREE.ACESFilmicToneMapping
+renderer.toneMappingExposure = 1.3
+container.appendChild(renderer.domElement)
+
+const controls = new OrbitControls(camera, renderer.domElement)
+controls.enableDamping = true
+controls.dampingFactor = 0.05
+controls.enableZoom = false
+controls.enablePan = false
+
+// ─── LIGHTING ───
+scene.add(new THREE.AmbientLight(0xffffff, 0.6))
+
+const keyLight = new THREE.DirectionalLight(0xffffff, 1.6)
+keyLight.position.set(4, 6, 8)
+keyLight.castShadow = true
+scene.add(keyLight)
+
+const fillLight = new THREE.DirectionalLight(0xccddff, 0.5)
+fillLight.position.set(-4, 2, -4)
+scene.add(fillLight)
+
+const rimLight = new THREE.PointLight(0xffffff, 0.8, 15)
+rimLight.position.set(-6, 4, 6)
+scene.add(rimLight)
+
+const hemiLight = new THREE.HemisphereLight(0x1a1a2e, 0x0a0a0a, 0.4)
+scene.add(hemiLight)
+
+// Subtle green glow from below
+const glowLight = new THREE.PointLight(0x39ff14, 0.2, 12)
+glowLight.position.set(0, -4, 2)
+scene.add(glowLight)
+
+// ─── SCREEN STATE ───
+let screenMode = 'full'
+let screenTexture, screenMat
+const screenCanvas = document.createElement('canvas')
+screenCanvas.width = 1024
+screenCanvas.height = 640
+function createGsapDemo() {
+    const demo = document.createElement('div')
+    demo.style.position = 'absolute'
+    demo.style.bottom = '20px'
+    demo.style.left = '50%'
+    demo.style.transform = 'translateX(-50%)'
+    demo.style.zIndex = '100'
+    demo.innerHTML = `
+        <button style="padding: 10px 20px; background: var(--accent); color: #000; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 14px; margin: 0 5px;">
+            GSAP Skills Demo
+        </button>
+        <button style="padding: 10px 20px; background: transparent; color: var(--white); border: 2px solid var(--accent); border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 14px; margin: 0 5px;">
+            Timeline Control
+        </button>
+        <button style="padding: 10px 20px; background: transparent; color: var(--white); border: 2px solid var(--accent); border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 14px; margin: 0 5px;">
+            Easing Variety
+        </button>
+    `
+
+    const button = demo.querySelector('button')
+    button.addEventListener('click', () => {
+        gsap.to(demo, { opacity: 0, duration: 0.3, display: 'none', onComplete: () => demo.remove() })
+    })
+
+    return demo
+}
+
+const gsapDemo = createGsapDemo()
+document.body.appendChild(gsapDemo)
+
+const timeline = gsap.timeline({ repeat: -1, repeatDelay: 1 })
+timeline
+    .from('.gsap-example', { opacity: 0, duration: 0.5, ease: 'power3.inOut' }, 0)
+    .to('.gsap-example', { opacity: 1, duration: 0.5, ease: 'power3.inOut' }, 0.5)
+    .to('.gsap-example', { scale: 1.1, duration: 0.3, ease: 'power2.inOut', repeat: 1, yoyo: true }, 1)
+
+function createGsapDemo() {
+    const demo = document.createElement('div')
+    demo.style.position = 'absolute'
+    demo.style.bottom = '20px'
+    demo.style.left = '50%'
+    demo.style.transform = 'translateX(-50%)'
+    demo.style.zIndex = '100'
+    demo.innerHTML = `
+        <button style="padding: 10px 20px; background: var(--accent); color: #000; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 14px; margin: 0 5px;">
+            GSAP Skills Demo
+        </button>
+        <button style="padding: 10px 20px; background: transparent; color: var(--white); border: 2px solid var(--accent); border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 14px; margin: 0 5px;">
+            Timeline Control
+        </button>
+        <button style="padding: 10px 20px; background: transparent; color: var(--white); border: 2px solid var(--accent); border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 14px; margin: 0 5px;">
+            Easing Variety
+        </button>
+    `
+
+    const button = demo.querySelector('button')
+    button.addEventListener('click', () => {
+        gsap.to(demo, { opacity: 0, duration: 0.3, display: 'none', onComplete: () => demo.remove() })
+    })
+
+    return demo
+}
+
+const gsapDemo = createGsapDemo()
+document.body.appendChild(gsapDemo)
+
+const timeline = gsap.timeline({ repeat: -1, repeatDelay: 1 })
+timeline
+    .from('.gsap-example', { opacity: 0, duration: 0.5, ease: 'power3.inOut' }, 0)
+    .to('.gsap-example', { opacity: 1, duration: 0.5, ease: 'power3.inOut' }, 0.5)
+    .to('.gsap-example', { scale: 1.1, duration: 0.3, ease: 'power2.inOut', repeat: 1, yoyo: true }, 1)
+
+function roundRect(x, y, w, h, r) {
+    ctx.beginPath()
+    ctx.moveTo(x + r, y)
+    ctx.lineTo(x + w - r, y)
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r)
+    ctx.lineTo(x + w, y + h - r)
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h)
+    ctx.lineTo(x + r, y + h)
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r)
+    ctx.lineTo(x, y + r)
+    ctx.quadraticCurveTo(x, y, x + r, y)
+    ctx.closePath()
+}
+
+function drawMenuItem(x, y, w, h, name, price, bgColor) {
+    roundRect(x, y, w, h, 6)
+    ctx.fillStyle = '#1a1e28'
+    ctx.fill()
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)'
+    ctx.lineWidth = 1
+    ctx.stroke()
+    roundRect(x + 6, y + 6, w - 12, h * 0.55, 4)
+    ctx.fillStyle = bgColor
+    ctx.fill()
+    ctx.font = '600 11px Inter, sans-serif'
+    ctx.fillStyle = '#ffffff'
+    ctx.textAlign = 'left'
+    ctx.fillText(name, x + 8, y + h * 0.68 + 12)
+    ctx.font = '700 12px Inter, sans-serif'
+    ctx.fillStyle = '#ffffff'
+    ctx.fillText('P' + price, x + 8, y + h * 0.68 + 27)
+}
+
+function drawScreen() {
+    ctx.clearRect(0, 0, 1024, 640)
+
+    if (screenMode === 'full') {
+        ctx.fillStyle = '#1a1a1a'
+        ctx.fillRect(0, 0, 1024, 640)
+
+        // Top bar
+        roundRect(10, 8, 1004, 38, 8)
+        ctx.fillStyle = '#252525'
+        ctx.fill()
+        ctx.font = '600 14px Inter, sans-serif'
+        ctx.textAlign = 'left'
+        ctx.fillStyle = '#fff'
+        ctx.fillText('Cart', 28, 33)
+        ctx.font = '400 13px Inter, sans-serif'
+        ctx.fillStyle = '#fff'
+        ctx.fillText('P0.00', 70, 33)
+        ctx.fillText('Subtotal: P0.00', 180, 33)
+        ctx.fillText('Tax: P0.00', 360, 33)
+
+        const itemW = 121, itemH = 90, startY = 78
+
+        // Drinks
+        ctx.font = '700 14px Inter, sans-serif'
+        ctx.fillStyle = '#fff'
+        ctx.textAlign = 'left'
+        ctx.fillText('DRINKS', 14, 70)
+        const drinks = [
+            ['Iced Coffee', '95', '#8B7355'], ['Matcha Latte', '120', '#7a9a5a'],
+            ['Blue Lemonade', '90', '#4a8ab5'], ['Choco Frappe', '110', '#6b4226'],
+            ['Mango Smoothie', '130', '#d4a030'], ['Passion Tea', '110', '#c47a30'],
+            ['Classic Coke', '80', '#8b2020'], ['Draft Beer', '150', '#d4a020'],
+        ]
+        drinks.forEach((item, i) => drawMenuItem(14 + i * (itemW + 3), startY, itemW, itemH, item[0], item[1], item[2]))
+
+        // Snacks
+        const snacksY = startY + itemH + 14
+        ctx.font = '700 14px Inter, sans-serif'
+        ctx.fillStyle = '#fff'
+        ctx.fillText('SNACKS', 14, snacksY)
+        const snacks = [
+            ['Fries', '80', '#c4a030'], ['Nachos', '120', '#c47a30'],
+            ['Chicken Wings', '150', '#a05020'], ['Mozzarella Sticks', '110', '#c4a050'],
+            ['Onion Rings', '90', '#b08030'], ['Potato Skins', '160', '#9a7040'],
+            ['Spring Rolls', '110', '#8a6a30'], ['Fried Calamari', '180', '#a08050'],
+        ]
+        snacks.forEach((item, i) => drawMenuItem(14 + i * (itemW + 3), snacksY + 8, itemW, itemH, item[0], item[1], item[2]))
+
+        // Meals
+        const mealsY = snacksY + 8 + itemH + 14
+        ctx.font = '700 14px Inter, sans-serif'
+        ctx.fillStyle = '#fff'
+        ctx.fillText('MEALS', 14, mealsY)
+        const meals = [
+            ['Beef Burger', '150', '#8a5020'], ['Pasta Carbonara', '160', '#c4b070'],
+            ['Grilled Chicken', '170', '#a07030'], ['Steak', '250', '#6a3020'],
+            ['Fish & Chips', '280', '#b09050'], ['Club Sandwich', '220', '#a08040'],
+            ['Caesar Salad', '190', '#5a8a30'], ['Cheesecake', '150', '#d4c090'],
+        ]
+        meals.forEach((item, i) => drawMenuItem(14 + i * (itemW + 3), mealsY + 8, itemW, itemH, item[0], item[1], item[2]))
+
+        // Cart FAB
+        const fabX = 980, fabY = 590, fabR = 28
+        ctx.beginPath()
+        ctx.arc(fabX, fabY + 3, fabR, 0, Math.PI * 2)
+        ctx.fillStyle = 'rgba(0,0,0,0.5)'
+        ctx.fill()
+        ctx.beginPath()
+        ctx.arc(fabX, fabY, fabR, 0, Math.PI * 2)
+        ctx.fillStyle = '#2196F3'
+        ctx.fill()
+        ctx.save()
+        ctx.translate(fabX, fabY)
+        ctx.strokeStyle = '#fff'
+        ctx.lineWidth = 2
+        ctx.lineCap = 'round'
+        ctx.beginPath()
+        ctx.moveTo(-10, -6); ctx.lineTo(-7, -6); ctx.lineTo(-3, 6); ctx.lineTo(10, 6); ctx.lineTo(12, -1); ctx.lineTo(-5, -1)
+        ctx.stroke()
+        ctx.beginPath(); ctx.arc(-2, 9, 2.5, 0, Math.PI * 2); ctx.stroke()
+        ctx.beginPath(); ctx.arc(8, 9, 2.5, 0, Math.PI * 2); ctx.stroke()
+        ctx.beginPath(); ctx.moveTo(-8, -6); ctx.lineTo(-12, -12)
+        ctx.stroke()
+        ctx.restore()
+    }
+
+    if (screenMode === 'minimal') {
+        const g = ctx.createLinearGradient(0, 0, 0, 640)
+        g.addColorStop(0, '#0a0a0a')
+        g.addColorStop(1, '#111')
+        ctx.fillStyle = g
+        ctx.fillRect(0, 0, 1024, 640)
+        ctx.fillStyle = g
+        ctx.fillRect(0, 0, 1024, 640)
+        ctx.font = 'bold 120px Inter, sans-serif'
+        ctx.fillStyle = '#ffffff'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+        ctx.fillText('12:45', 512, 260)
+        ctx.font = '300 26px Inter, sans-serif'
+        ctx.fillStyle = 'rgba(255,255,255,0.4)'
+        ctx.fillText('Tuesday, June 9', 512, 340)
+        ctx.textBaseline = 'alphabetic'
+        ctx.font = '300 16px Inter, sans-serif'
+        ctx.fillStyle = '#ffffff'
+        ctx.fillText('Tap for menu', 512, 560)
+    }
+}
+
+// ─── TABLET ───
+function createTablet() {
+    const g = new THREE.Group()
+    const W = 8.44, H = 4.98, D = 0.32
+
+    const body = new THREE.Mesh(
+        new THREE.BoxGeometry(W, H, D),
+        new THREE.MeshPhysicalMaterial({ color: 0x1a1a1a, metalness: 0.8, roughness: 0.2, clearcoat: 0.6, clearcoatRoughness: 0.1 })
+    )
+    body.castShadow = true
+    g.add(body)
+
+    // Screen
+    drawScreen()
+    screenTexture = new THREE.CanvasTexture(screenCanvas)
+    screenTexture.colorSpace = THREE.SRGBColorSpace
+    screenMat = new THREE.MeshPhysicalMaterial({
+        map: screenTexture, metalness: 0.05, roughness: 0.02, clearcoat: 1.0, clearcoatRoughness: 0,
+        emissive: new THREE.Color(0x39ff14), emissiveMap: screenTexture, emissiveIntensity: 0.12,
+    })
+    const screen = new THREE.Mesh(new THREE.PlaneGeometry(W - 0.08, H - 0.08), screenMat)
+    screen.position.z = D / 2 + 0.005
+    screen.userData.clickable = true
+    g.add(screen)
+
+    // Bezel
+    const bezel = new THREE.Mesh(
+        new THREE.PlaneGeometry(W, H),
+        new THREE.MeshPhysicalMaterial({ color: 0x0a0a0a, metalness: 0.9, roughness: 0.15 })
+    )
+    bezel.position.z = D / 2 + 0.004
+    g.add(bezel)
+
+    // Camera
+    const cam = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.06, 0.06, 0.02, 16),
+        new THREE.MeshPhysicalMaterial({ color: 0x0a0a0a, metalness: 0.9, roughness: 0.05 })
+    )
+    cam.rotation.x = Math.PI / 2
+    cam.position.set(-W / 2 + 0.4, -H / 2 + 0.4, D / 2 + 0.01)
+    g.add(cam)
+
+    // Buttons
+    const bm = new THREE.MeshPhysicalMaterial({ color: 0x222222, metalness: 0.6, roughness: 0.4 })
+    const pb = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.25, 0.04), bm)
+    pb.position.set(W / 2 + 0.02, 0.4, 0)
+    g.add(pb)
+    const v1 = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.3, 0.04), bm)
+    v1.position.set(W / 2 + 0.02, 1.1, 0)
+    g.add(v1)
+    const v2 = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.3, 0.04), bm)
+    v2.position.set(W / 2 + 0.02, 1.65, 0)
+    g.add(v2)
+
+    // Speakers
+    const sm = new THREE.MeshPhysicalMaterial({ color: 0x050505, metalness: 0.3, roughness: 0.7 })
+    const sg = new THREE.CapsuleGeometry(0.025, 0.12, 4, 8)
+    for (let i = 0; i < 4; i++) {
+        const s1 = new THREE.Mesh(sg, sm); s1.position.set(-W / 3 + i * 0.15, -H / 2 - 0.005, D / 3); s1.rotation.y = Math.PI / 2; g.add(s1)
+        const s2 = new THREE.Mesh(sg, sm); s2.position.set(W / 3 + i * 0.15, -H / 2 - 0.005, D / 3); s2.rotation.y = Math.PI / 2; g.add(s2)
+    }
+
+    // Port
+    const port = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.08, 0.08), new THREE.MeshPhysicalMaterial({ color: 0x050505 }))
+    port.position.set(0, -H / 2 - 0.005, 0)
+    g.add(port)
+
+    // Samsung logo (back, transparent bg)
+    const lc = document.createElement('canvas')
+    lc.width = 512; lc.height = 128
+    const lx = lc.getContext('2d')
+    lx.clearRect(0, 0, 512, 128)
+    lx.font = 'bold 48px Inter, sans-serif'
+    lx.fillStyle = '#666'
+    lx.textAlign = 'center'
+    lx.fillText('SAMSUNG', 256, 80)
+    const logo = new THREE.Mesh(
+        new THREE.PlaneGeometry(2.5, 0.6),
+        new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(lc), transparent: true })
+    )
+    logo.position.set(0, 0, -D / 2 - 0.001)
+    logo.rotation.y = Math.PI
+    g.add(logo)
+
+    return g
+}
+
+const tablet = createTablet()
+tablet.position.set(3.5, 0, -8)
+tablet.rotation.y = -Math.PI / 5
+tablet.rotation.x = 0.05
+tablet.scale.setScalar(0)
+scene.add(tablet)
+
+// 3D Zoom-in animation
+gsap.to(tablet.scale, {
+    x: 0.75, y: 0.75, z: 0.75,
+    duration: 1.8,
+    ease: 'power3.out',
+    delay: 0.3,
+})
+gsap.to(tablet.position, {
+    z: 0,
+    duration: 2,
+    ease: 'power3.out',
+    delay: 0.3,
+})
+
+// ─── CLICK ───
+const raycaster = new THREE.Raycaster()
+const mouse = new THREE.Vector2()
+let clickCD = false
+
+renderer.domElement.addEventListener('click', (e) => {
+    const r = renderer.domElement.getBoundingClientRect()
+    mouse.x = ((e.clientX - r.left) / r.width) * 2 - 1
+    mouse.y = -((e.clientY - r.top) / r.height) * 2 + 1
+    raycaster.setFromCamera(mouse, camera)
+    for (const h of raycaster.intersectObjects(tablet.children, true)) {
+        if (h.object.userData.clickable && !clickCD) {
+            clickCD = true
+            setTimeout(() => clickCD = false, 300)
+            screenMode = screenMode === 'full' ? 'minimal' : 'full'
+            drawScreen()
+            screenTexture.needsUpdate = true
+            screenMat.emissiveIntensity = 0.5
+            setTimeout(() => screenMat.emissiveIntensity = 0.12, 100)
+            break
+        }
+    }
+})
+
+// ─── PARTICLES ───
+const pGeo = new THREE.BufferGeometry()
+const pPos = new Float32Array(80 * 3)
+for (let i = 0; i < 80; i++) {
+    pPos[i * 3] = (Math.random() - 0.5) * 25
+    pPos[i * 3 + 1] = (Math.random() - 0.5) * 18
+    pPos[i * 3 + 2] = (Math.random() - 0.5) * 12
+}
+pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3))
+scene.add(new THREE.Points(pGeo, new THREE.PointsMaterial({ size: 0.03, color: 0xffffff, transparent: true, opacity: 0.15, sizeAttenuation: true })))
+
+// ─── GSAP ANIMATIONS ───
+
+// Hero entrance - simple fade in on load
+gsap.to('.hero-text', { opacity: 1, y: 0, duration: 1, ease: 'power2.out', delay: 0.5 })
+gsap.to('.hero-visual', { opacity: 1, x: 0, duration: 1, ease: 'power2.out', delay: 0.7 })
+
+// Steps
+gsap.utils.toArray('.step').forEach((step, i) => {
+    gsap.to(step, {
+        opacity: 1, y: 0, duration: 0.6, ease: 'power2.out',
+        scrollTrigger: { trigger: step, start: 'top 85%', toggleActions: 'play none none reverse' },
+        delay: i * 0.08
+    })
+})
+
+// Features
+gsap.utils.toArray('.feature-card').forEach((card, i) => {
+    gsap.to(card, {
+        opacity: 1, y: 0, duration: 0.5, ease: 'power2.out',
+        scrollTrigger: { trigger: card, start: 'top 88%', toggleActions: 'play none none reverse' },
+        delay: (i % 3) * 0.08
+    })
+})
+
+// Contact
+gsap.from('.contact-info', {
+    opacity: 0, x: -40, duration: 0.8, ease: 'power2.out',
+    scrollTrigger: { trigger: '#contact', start: 'top 75%', toggleActions: 'play none none reverse' }
+})
+gsap.from('.contact-form', {
+    opacity: 0, x: 40, duration: 0.8, ease: 'power2.out',
+    scrollTrigger: { trigger: '#contact', start: 'top 75%', toggleActions: 'play none none reverse' }
+})
+
+// ─── ANIMATION LOOP ───
+const clock = new THREE.Clock()
+let isDragging = false
+let autoRotate = true
+let dragTimeout
+
+controls.addEventListener('start', () => { isDragging = true; autoRotate = false; clearTimeout(dragTimeout) })
+controls.addEventListener('end', () => { isDragging = false; dragTimeout = setTimeout(() => autoRotate = true, 3000) })
+
+function animate() {
+    requestAnimationFrame(animate)
+    const delta = clock.getDelta()
+    const elapsed = clock.getElapsedTime()
+
+    // Tablet subtle float
+    tablet.position.y = Math.sin(elapsed * 0.5) * 0.08
+    tablet.rotation.z = Math.sin(elapsed * 0.3) * 0.008
+
+    if (autoRotate) tablet.rotation.y += delta * 0.25
+
+    rimLight.intensity = 0.5 + Math.sin(elapsed * 1.5) * 0.1
+
+    controls.update()
+    renderer.render(scene, camera)
+}
+
+// ─── RESIZE ───
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight
+    camera.updateProjectionMatrix()
+    renderer.setSize(window.innerWidth, window.innerHeight)
+})
+
+// ─── NAV SCROLL ───
+document.querySelectorAll('.nav-link, .footer-links a').forEach(link => {
+    link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href')
+        if (href?.startsWith('#')) {
+            e.preventDefault()
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
+        }
+    })
+})
+
+// ─── START ───
+animate()
+const loading = document.getElementById('loading')
+loading.classList.add('hidden')
+setTimeout(() => loading.style.display = 'none', 600)
