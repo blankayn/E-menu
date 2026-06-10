@@ -113,21 +113,7 @@ a {
     pointer-events: auto;
 }
 
-.canvas-mask {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 50%;
-    height: 100%;
-    z-index: 2;
-    pointer-events: auto;
-    background: transparent;
-}
-
 @media (max-width: 1024px) {
-    .canvas-mask {
-        display: none;
-    }
     #three-canvas canvas {
         pointer-events: auto;
     }
