@@ -292,30 +292,33 @@ const raycaster = new THREE.Raycaster()
 const mouse = new THREE.Vector2()
 let clickCD = false
 
-function checkTabletIntersection(event) {
-  const r = renderer.domElement.getBoundingClientRect()
-  mouse.x = ((event.clientX - r.left) / r.width) * 2 - 1
-  mouse.y = -((event.clientY - r.top) / r.height) * 2 + 1
-  raycaster.setFromCamera(mouse, camera)
-  return raycaster.intersectObjects(tablet.children, true).length > 0
-}
-
 renderer.domElement.addEventListener('mousemove', (e) => {
-  if (window.innerWidth < 1024) return // Disable rotation on mobile for scroll stability
-  controls.enabled = checkTabletIntersection(e)
+  if (window.innerWidth < 1024) return // Keep mobile behavior as is (no spin)
+  
+  // Only enable rotation if mouse is on the right half of the screen
+  const isRightSide = e.clientX > window.innerWidth / 2
+  controls.enabled = isRightSide
 })
 
 renderer.domElement.addEventListener('click', (e) => {
-  if (!checkTabletIntersection(e)) return
+  if (window.innerWidth >= 1024 && e.clientX <= window.innerWidth / 2) return
   
-  if (!clickCD) {
-    clickCD = true
-    setTimeout(() => clickCD = false, 300)
-    screenMode = screenMode === 'full' ? 'minimal' : 'full'
-    drawScreen()
-    screenTexture.needsUpdate = true
-    screenMat.emissiveIntensity = 0.5
-    setTimeout(() => screenMat.emissiveIntensity = 0.12, 100)
+  const r = renderer.domElement.getBoundingClientRect()
+  mouse.x = ((e.clientX - r.left) / r.width) * 2 - 1
+  mouse.y = -((e.clientY - r.top) / r.height) * 2 + 1
+  raycaster.setFromCamera(mouse, camera)
+  
+  for (const h of raycaster.intersectObjects(tablet.children, true)) {
+    if (h.object.userData.clickable && !clickCD) {
+      clickCD = true
+      setTimeout(() => clickCD = false, 300)
+      screenMode = screenMode === 'full' ? 'minimal' : 'full'
+      drawScreen()
+      screenTexture.needsUpdate = true
+      screenMat.emissiveIntensity = 0.5
+      setTimeout(() => screenMat.emissiveIntensity = 0.12, 100)
+      break
+    }
   }
 })
 
