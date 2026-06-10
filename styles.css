@@ -210,6 +210,7 @@ a {
     display: flex;
     align-items: center;
     overflow: hidden;
+    pointer-events: none;
 }
 
 .hero-inner {
@@ -221,6 +222,7 @@ a {
     align-items: center;
     justify-content: space-between;
     gap: 60px;
+    pointer-events: auto;
 }
 
 .hero-text {

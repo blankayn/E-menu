@@ -261,7 +261,7 @@ scene.add(tablet)
 // Mobile: scale down tablet
 if (window.innerWidth < 768) {
   tablet.scale.setScalar(0.45)
-  tablet.position.set(0, -1, -6)
+  tablet.position.set(0, -2.5, -6)
 } else {
   tablet.scale.setScalar(0)
 }
@@ -480,7 +480,7 @@ window.addEventListener('resize', () => {
   
   if (window.innerWidth < 768) {
     gsap.to(tablet.scale, { x: 0.55, y: 0.55, z: 0.55, duration: 0.5 })
-    gsap.to(tablet.position, { x: 0, y: -1, z: -2, duration: 0.5 })
+    gsap.to(tablet.position, { x: 0, y: -2.5, z: -2, duration: 0.5 })
   } else {
     gsap.to(tablet.scale, { x: 0.75, y: 0.75, z: 0.75, duration: 0.5 })
     gsap.to(tablet.position, { x: 3.5, y: 0, z: 0, duration: 0.5 })
