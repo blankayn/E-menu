@@ -292,17 +292,7 @@ const raycaster = new THREE.Raycaster()
 const mouse = new THREE.Vector2()
 let clickCD = false
 
-renderer.domElement.addEventListener('mousemove', (e) => {
-  if (window.innerWidth < 1024) return // Keep mobile behavior as is (no spin)
-  
-  // Only enable rotation if mouse is on the right half of the screen
-  const isRightSide = e.clientX > window.innerWidth / 2
-  controls.enabled = isRightSide
-})
-
 renderer.domElement.addEventListener('click', (e) => {
-  if (window.innerWidth >= 1024 && e.clientX <= window.innerWidth / 2) return
-  
   const r = renderer.domElement.getBoundingClientRect()
   mouse.x = ((e.clientX - r.left) / r.width) * 2 - 1
   mouse.y = -((e.clientY - r.top) / r.height) * 2 + 1
